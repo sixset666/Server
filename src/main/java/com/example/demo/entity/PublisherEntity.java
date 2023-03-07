@@ -14,8 +14,9 @@ public class PublisherEntity {
    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-   @NotBlank
+   @NotBlank(message = "Издательство должно иметь имя")
     private String publisher;
+    @NotBlank(message = "Издательство должно иметь адрес")
    private String city;
    @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "publishing")
