@@ -19,4 +19,8 @@ public class   BookService {
     public Iterable<BookEntity> getAll(){
         return repo.findAll();
     }
+
+    public Iterable<BookEntity> getPublisher(String title, String city){
+        return repo.findDistinctByPublishing_PublisherOrPublishing_Citi(title,city);
+    }
 }

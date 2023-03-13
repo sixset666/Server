@@ -17,28 +17,61 @@ import javax.xml.bind.ValidationException;
 @RequestMapping("api/v1/book")
 public class BookController {
     private final BookService service;
-    private BookController(BookService service) {
+    public BookController(BookService service) {
         this.service = service;
     }
 
     @GetMapping("/all")
-    public ResponseEntity<BaseResponse> add(@RequestBody BookEntity data) {
-
+    public ResponseEntity<BaseResponse> getAll() {
         return ResponseEntity.ok(new BookListResponse(service.getAll()));
     }
 
     @PostMapping("/add")
-    public ResponseEntity<BookResponse> add(@RequestBody BookEntity data) {
+    public ResponseEntity<BaseResponse> add(@RequestBody BookEntity data) {
         try {
+            System.out.println(data.toString());
             BookValidationUtils.bookValidationUtils(data);
             service.save(data);
-            return ResponseEntity.ok(new BookResponse(true, "Книга добавлена",data));
+            return ResponseEntity.ok(new BaseResponse(true, "Книга добавлена"));
         } catch (ValidationExceptionBook e) {
-            return ResponseEntity.badRequest().body(new BaseResponce(false, e.getMessage(),data));
+            return ResponseEntity.badRequest().body(new BaseResponse(false, e.getMessage()));
         } catch (Exception e) {
-                return ResponseEntity.badRequest().body(new BaseResponce(false,e.getMessage(),data));
+                return ResponseEntity.badRequest().body(new BaseResponse(false,e.getMessage()));
         }
     }
+
+    @PutMapping("/update")
+    public ResponseEntity <BaseResponse> update(@RequestBody BookEntity data){
+        try{
+            BookValidationUtils.bookValidationUtils(data);
+            service.save(data);
+            return ResponseEntity.ok(new BaseResponse(true,"В книгу внесены изменения"));
+        }
+        catch (ValidationExceptionBook e){
+            return ResponseEntity.badRequest().body(new BaseResponse(false,e.getMessage()));
+        }
+        catch (Exception e){
+            return ResponseEntity.badRequest().body(new BaseResponse(false,e.getMessage()));
+        }
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity <BaseResponse> delete(@PathVariable Long id){
+        try{
+            service.delete(id);
+            return ResponseEntity.ok(new BaseResponse(true,"Издательство удалено"));
+        }
+        catch(Exception e){
+            return ResponseEntity.ok(new BaseResponse(false,e.getMessage()));
+        }
+    }
+
+
+    @GetMapping()
+    public ResponseEntity<BaseResponse> getPublisher(@RequestParam String title,@RequestParam String city){
+        return ResponseEntity.ok(new BookListResponse((service.getPublisher(title,city))));
+    }
+
 
 }
 

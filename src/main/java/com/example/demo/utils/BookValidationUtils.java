@@ -11,11 +11,12 @@ public class BookValidationUtils {
         if (title == null || title.isBlank()) {
             throw new ValidationExceptionPublisher("Поле название не может быть пустым");
         }
-        if (book.getAuthor() == null){
+        if (book.getAuthor() == null) {
             throw new ValidationExceptionBook("Нужно выбрать автора");
         }
-        if (book.getPublishing() == null){
+        if (book.getPublishing() == null) {
             throw new ValidationExceptionBook("Нужно выбрать издательство");
+
         }
     }
 }
